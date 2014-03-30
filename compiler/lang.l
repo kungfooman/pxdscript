@@ -10,6 +10,7 @@
 #include "error.h"
 
 extern int lineno;
+extern int interactiveMode;
 
 int commentDepth=0;
 %}
@@ -40,7 +41,7 @@ int commentDepth=0;
 
 "/*"                   { commentDepth++; BEGIN(commentsc);}
 
-\n                       lineno++;
+\n                     { lineno++; if (interactiveMode) return '\n'; }
 "//"[^\n]*            /* ignore (singleline comment)*/;
 
 bool                     return tBOOL;

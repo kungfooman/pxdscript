@@ -10,6 +10,7 @@
 #include "error.h"
 
 extern char *yytext;
+extern int interactiveMode;
 
 int lineno = 0;
 
@@ -27,7 +28,8 @@ void yyerror(const char *format, ...)
   fprintf(stderr, "*** syntax error before %s at line %i\n", yytext, lineno);
   fprintf(stderr, "*** compilation terminated\n");
   
-  exit(1);
+  if ( ! interactiveMode)
+	exit(1);
 }
 
 void reportError(int lineno, const char *format, ...)
@@ -60,8 +62,9 @@ void reportWarning(int lineno, const char *format, ...)
 
 void errorCheck()
 {
-  if (errors!=0) {
-  fprintf(stderr, "*** %i error(s) encountered, compilation terminated\n",errors);
-     exit(1);
-  }
+	if (errors!=0) {
+		fprintf(stderr, "*** %i error(s) encountered, compilation terminated\n",errors);
+		if ( ! interactiveMode)
+			exit(1);
+	}
 }
